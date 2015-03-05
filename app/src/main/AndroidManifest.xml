@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.sap.i047525.mineinbox"
+            android:name=".data.GameProvider" />
     </application>
 
 </manifest>
