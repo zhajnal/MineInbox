@@ -2,4 +2,6 @@
     <string name="app_name">Mine Inbox</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="already_picked">Item already tapped</string>
+    <string name="bomb_picked">It is a bomb!!! Game over</string>
 </resources>
