@@ -104,6 +104,19 @@ public class ProviderTest extends AndroidTestCase {
         );
 
         assertEquals(count, 1);
+
+        // Now see if we can successfully query if we include the coordinates
+        Cursor cursor = mContext.getContentResolver().query(
+                GameContract.CellEntry.buildCellUri(1, 1),
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null  // sort order
+        );
+
+        DBTest.iterateAndLogCursor(cursor, LOG_TAG);
+        DBTest.validateCursor(cursor, values);
+
     }
 
 
