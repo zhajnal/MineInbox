@@ -147,9 +147,12 @@ public class GameProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         GameContract.CellEntry.TABLE_NAME,
                         projection,
-                        selection,
-                        selectionArgs,
-                        null,
+                        GameContract.CellEntry.COLUMN_COORD_X + "= ? AND " + GameContract.CellEntry.COLUMN_COORD_Y + "= ?",
+                        new String[]{
+//                                Integer.toString(values.getAsInteger(GameContract.CellEntry.COLUMN_COORD_X)),
+//                                Integer.toString(values.getAsInteger(GameContract.CellEntry.COLUMN_COORD_Y))
+                                uri.getPathSegments().get(1),   //get x,y from uri
+                                uri.getPathSegments().get(2)},                        null,
                         null,
                         sortOrder
                 );

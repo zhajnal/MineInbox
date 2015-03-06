@@ -52,7 +52,7 @@ public class ProviderTest extends AndroidTestCase {
 //
 //        assertTrue(cellRowId != -1);
         String location = cellUri.toString();
-        assertTrue(location != GameContract.CellEntry.CONTENT_URI.toString() + "/1/1");
+        assertTrue(location != GameContract.CellEntry.CONTENT_URI.toString() + "/2/2");
 
         Cursor cursor = mContext.getContentResolver().query(
                 GameContract.CellEntry.CONTENT_URI,
@@ -107,7 +107,7 @@ public class ProviderTest extends AndroidTestCase {
 
         // Now see if we can successfully query if we include the coordinates
         Cursor cursor = mContext.getContentResolver().query(
-                GameContract.CellEntry.buildCellUri(1, 1),
+                GameContract.CellEntry.buildCellUri(2, 2),
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
