@@ -2,6 +2,9 @@ package com.sap.i047525.mineinbox;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +31,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
     //Const
     private static final int BOMB = 9;
     private static final int UNPICKED = 10;
-    private static final int FLAGGED = 11;
+    private static final int FLAGGED_EMPTY = 11;
+    private static final int FLAGGED_BOMB = 12;
 
     //global
     RelativeLayout rl;
@@ -35,8 +40,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
     List<String> list;
     int[][] mineField;
 
-    int rows_num = 30;
-    int cols_num = 16;
+    int rows_num = 8;
+    int cols_num = 8;
     int bomb_num = 10;
 
 
@@ -55,7 +60,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-            timerView.setText(String.format("%d:%02d", minutes, seconds));
+            timerView.setText(String.format("Timer: %d:%02d", minutes, seconds));
+
 
             timerHandler.postDelayed(this, 500);
         }
@@ -108,7 +114,7 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 /*int row = arg2 / cols_num;
                 int col = arg2 % cols_num;
 
@@ -122,14 +128,19 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
                 int test[][] = getNeighbours(arg2);*/
 
-                if (isUnpicked(arg2)) {
-                    if (isBomb(arg2)) {
+                if (isUnpicked(position)) {
+                    if (isBomb(position)) {
                         //Game Over
                         stopTimer();
                         Toast.makeText(getActivity(), R.string.bomb_picked,
                                 Toast.LENGTH_SHORT).show();
-                        arg1.setBackgroundColor(Color.RED);
+                        view.setBackgroundColor(Color.RED);
                     } else {
+                        //Game
+                        recalculateMineField(position);
+                        //update adapter
+                        ((BaseAdapter)grid.getAdapter()).notifyDataSetChanged();
+                        view.setBackgroundColor(Color.GREEN);
 
                     }
                 } else {
@@ -140,6 +151,24 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
             }
         });
+
+        grid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                /*Toast.makeText(getActivity(), "Item Long Clicked",
+                        Toast.LENGTH_SHORT).show();*/
+                changeFlag(position);
+                ((BaseAdapter)grid.getAdapter()).notifyDataSetChanged();
+                if (!isUnpicked(position)) {
+                    view.setBackgroundColor(Color.LTGRAY);
+                } else {
+                    view.setBackgroundColor(Color.WHITE);
+                }
+
+                return true;
+            }
+        });
+
 
         return rootView;
     }
@@ -182,7 +211,6 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
     public boolean isUnpicked(int listPos) {
         if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == UNPICKED ||
-                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == FLAGGED ||
                 mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == BOMB) {
             return true;
         } else {
@@ -192,6 +220,38 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
     public boolean isBomb(int listPos) {
         return mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == BOMB;
+    }
+
+    public boolean isFlagged(int listPos) {
+        if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == FLAGGED_EMPTY ||
+                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == FLAGGED_BOMB) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public void changeFlag(int listPos) {
+        if (isFlagged(listPos)) {
+            //change to either BOMB or UNPICKED
+            if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == FLAGGED_EMPTY) {
+                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = UNPICKED;
+                list.set(listPos, "10");
+            } else {
+                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = BOMB;
+                list.set(listPos, "9");
+            }
+        } else {
+            //flag for FLAG_BOMB or FLAG_EMPTY
+            if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == BOMB) {
+                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = FLAGGED_BOMB;
+                list.set(listPos, "12");
+            } else {
+                mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = FLAGGED_EMPTY;
+                list.set(listPos, "11");
+            }
+        }
+    //else Toast: Already FLAGGED_EMPTY?
     }
 
     public void startTimer() {
@@ -217,7 +277,7 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
             if (col_tmp < 0) {
                 continue;
             }
-            if (col_tmp > cols_num) {
+            if (col_tmp > cols_num - 1) {
                 continue;
             }
             for (int j = -1; j < 2; j++) {
@@ -225,7 +285,7 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
                 if (row_tmp < 0) {
                     continue;
                 }
-                if (row_tmp > rows_num) {
+                if (row_tmp > rows_num - 1) {
                     continue;
                 }
                 if (col == col_tmp && row == row_tmp) {continue;}
@@ -244,6 +304,16 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         return result;
     }
     public void recalculateMineField(int listPos) {
-
+        int bombNeighbours = 0;
+        int[][] tmp;
+        tmp = getNeighbours(listPos);
+        for (int i = 0; i < tmp.length; i++) {
+            if (mineField[tmp[i][0]][tmp[i][1]] == BOMB) {
+                bombNeighbours ++;
+            }
+        }
+        mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = bombNeighbours;
+        list.set(listPos, Integer.toString(bombNeighbours));
     }
+    
 }
