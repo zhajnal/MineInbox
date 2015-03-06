@@ -35,8 +35,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
     List<String> list;
     int[][] mineField;
 
-    int rows_num = 10;
-    int cols_num = 10;
+    int rows_num = 30;
+    int cols_num = 16;
     int bomb_num = 10;
 
 
