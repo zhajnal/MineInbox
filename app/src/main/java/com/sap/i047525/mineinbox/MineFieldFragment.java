@@ -332,6 +332,9 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
     }
 
     public void recalculateMineField(int listPos) {
+        if (!isUnpicked(listPos)){
+            return;
+        }
         int bombNeighbours = 0;
         int[][] tmp;
         tmp = getNeighbours(listPos);
@@ -342,8 +345,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         }
         mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = bombNeighbours;
         list.set(listPos, Integer.toString(bombNeighbours));
-        unpickedFields--;
         updatedFields.add(listPos);
+        unpickedFields--;
 
         //if there is no bomb neighbour
         if (bombNeighbours == 0) {
@@ -373,5 +376,4 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
                 Toast.LENGTH_SHORT).show();
 
     }
-    
 }
