@@ -2,9 +2,6 @@ package com.sap.i047525.mineinbox;
 
 import android.app.Fragment;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -69,16 +66,12 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
     //End Timer
 
-    Utility mUtility = new Utility();
-
     public MineFieldFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rows_num = mUtility.getBoardSizeX(getActivity());
-        cols_num = mUtility.getBoardSizeY(getActivity());
     }
 
     @Override
