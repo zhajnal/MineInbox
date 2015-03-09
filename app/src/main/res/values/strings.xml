@@ -5,4 +5,5 @@
     <string name="already_picked">Item already tapped</string>
     <string name="bomb_picked">It is a bomb!!! Game over</string>
     <string name="button_new_game">New Game</string>
+    <string name="bombs_on_field">Bombs on Filed: </string>
 </resources>
