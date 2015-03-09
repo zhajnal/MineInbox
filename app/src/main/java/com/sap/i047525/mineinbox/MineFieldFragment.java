@@ -66,12 +66,16 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 
     //End Timer
 
+    Utility mUtility = new Utility();
+
     public MineFieldFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rows_num = mUtility.getBoardSizeX(getActivity());
+        cols_num = mUtility.getBoardSizeY(getActivity());
     }
 
     @Override
