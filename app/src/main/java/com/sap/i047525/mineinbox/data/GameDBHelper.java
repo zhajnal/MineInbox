@@ -24,7 +24,18 @@ public class GameDbHelper extends SQLiteOpenHelper {
                 GameContract.CellEntry.COLUMN_COORD_Y + " INTEGER NOT NULL, " +
                 GameContract.CellEntry.COLUMN_STATE + " INTEGER NOT NULL );";
 
+        final String SQL_CREATE_HIGHSCORE_TABLE = "CREATE TABLE " + GameContract.CellEntry.TABLE_NAME + " (" +
+                GameContract.CellEntry._ID + " INTEGER PRIMARY KEY," +
+                GameContract.HighScoreEntry.COLUMN_OBJECTID + " TEXT NOT NULL, " +
+                GameContract.HighScoreEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                GameContract.HighScoreEntry.COLUMN_TABLE+ " TEXT NOT NULL " +
+                GameContract.HighScoreEntry.COLUMN_TIME + " INTEGER NOT NULL, " +
+                GameContract.HighScoreEntry.COLUMN_CREATEDAT + " TEXT NOT NULL, " +
+                GameContract.HighScoreEntry.COLUMN_UPDATEDAT + " TEXT NOT NULL, " +
+                ");";
+
         sqLiteDatabase.execSQL(SQL_CREATE_BOARD_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_HIGHSCORE_TABLE);
     }
 
     @Override
