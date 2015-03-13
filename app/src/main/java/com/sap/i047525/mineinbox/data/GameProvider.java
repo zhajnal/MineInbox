@@ -18,6 +18,8 @@ public class GameProvider extends ContentProvider {
 
     private static final int CELL = 100;
     private static final int CELLS = 101;
+    private static final int HIGHSCORE = 110;
+    private static final int HIGHSCORES = 111;
 
     @Override
     public boolean onCreate() {
@@ -35,6 +37,10 @@ public class GameProvider extends ContentProvider {
             case CELL:
                 return GameContract.CellEntry.CONTENT_ITEM_TYPE;
             case CELLS:
+                return GameContract.CellEntry.CONTENT_TYPE;
+            case HIGHSCORE:
+                return GameContract.CellEntry.CONTENT_ITEM_TYPE;
+            case HIGHSCORES:
                 return GameContract.CellEntry.CONTENT_TYPE;
 
             default:
@@ -57,6 +63,14 @@ public class GameProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+            case HIGHSCORES: {
+                long _id = db.insert(GameContract.HighScoreEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = GameContract.HighScoreEntry.buildHighScoreUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -68,13 +82,30 @@ public class GameProvider extends ContentProvider {
     public int bulkInsert(Uri uri, ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int returnCount = 0;
         switch (match) {
             case CELLS:
                 db.beginTransaction();
-                int returnCount = 0;
+                returnCount = 0;
                 try {
                     for (ContentValues value : values) {
                         long _id = db.insert(GameContract.CellEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case HIGHSCORES:
+                db.beginTransaction();
+                returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(GameContract.HighScoreEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }
@@ -170,6 +201,30 @@ public class GameProvider extends ContentProvider {
                 );
                 break;
             }
+            case HIGHSCORE: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        GameContract.HighScoreEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case HIGHSCORES: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        GameContract.HighScoreEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -182,6 +237,8 @@ public class GameProvider extends ContentProvider {
         final String authority = GameContract.CONTENT_AUTHORITY;
         matcher.addURI(authority, GameContract.PATH_CELL + "/#/#", CELL);
         matcher.addURI(authority, GameContract.PATH_CELL, CELLS);
+        matcher.addURI(authority, GameContract.PATH_HIGHSCORE + "/#", HIGHSCORE);
+        matcher.addURI(authority, GameContract.PATH_HIGHSCORE, HIGHSCORES);
         return matcher;
     }
 

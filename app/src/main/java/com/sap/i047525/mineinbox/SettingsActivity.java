@@ -83,6 +83,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         addPreferencesFromResource(R.xml.pref_general);
 
         bindPreferenceSummaryToValue(findPreference("pref_player_name"));
+        bindPreferenceSummaryToValue(findPreference("pref_board size"));
 
     }
 

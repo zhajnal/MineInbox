@@ -4,4 +4,6 @@
     tools:context="com.sap.i047525.mineinbox.StartActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_highscore" android:title="@string/action_highscore"
+        android:orderInCategory="101" app:showAsAction="ifRoom" />
 </menu>
