@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by i035921 on 2015.03.04..
  */
-public class GameDbHelper extends SQLiteOpenHelper {
+public class GameHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "mineinboxgame.db";
 
-    public GameDbHelper(Context context) {
+    public GameHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

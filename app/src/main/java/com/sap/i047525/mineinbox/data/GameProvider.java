@@ -2,7 +2,6 @@ package com.sap.i047525.mineinbox.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +13,7 @@ import android.net.Uri;
 public class GameProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private GameDbHelper mOpenHelper;
+    private GameHelper mOpenHelper;
 
     private static final int CELL = 100;
     private static final int CELLS = 101;
@@ -23,7 +22,7 @@ public class GameProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new GameDbHelper(getContext());
+        mOpenHelper = new GameHelper(getContext());
         return true;
     }
 
