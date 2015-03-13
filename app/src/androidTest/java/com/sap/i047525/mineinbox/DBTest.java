@@ -3,12 +3,11 @@ package com.sap.i047525.mineinbox;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.sap.i047525.mineinbox.data.GameContract;
-import com.sap.i047525.mineinbox.data.GameDbHelper;
+import com.sap.i047525.mineinbox.data.GameHelper;
 
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +23,7 @@ public class DBTest extends AndroidTestCase {
 
     public void testCreateDb() throws Throwable {
         mContext.deleteDatabase(DATABASE_NAME);
-        SQLiteDatabase db = new GameDbHelper(this.mContext).getWritableDatabase();
+        SQLiteDatabase db = new GameHelper(this.mContext).getWritableDatabase();
 
         assertEquals(true, db.isOpen());
 
@@ -34,7 +33,7 @@ public class DBTest extends AndroidTestCase {
     public void testInsertQueryDb(){
         Log.d(LOG_TAG, "----------------");
 
-        GameDbHelper dbHelper = new GameDbHelper(mContext);
+        GameHelper dbHelper = new GameHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues testValues = createCellValues(0);
