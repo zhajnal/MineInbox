@@ -1,10 +1,16 @@
 package com.sap.i047525.mineinbox;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sap.i047525.mineinbox.data.HighScore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -415,8 +423,13 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
 /*        Toast.makeText(getActivity(), R.string.bomb_picked,
                 Toast.LENGTH_SHORT).show();
 */
-        Toast.makeText(getActivity(), "Winner",
+/*        Toast.makeText(getActivity(), "Winner",
                 Toast.LENGTH_SHORT).show();
+*/
+        HighscoreConfirmationDialog dialog = new HighscoreConfirmationDialog();
+        dialog.time = System.currentTimeMillis() - startTime;
+        dialog.show(getFragmentManager(), "highscore");
+
     }
 
     public void loose() {
