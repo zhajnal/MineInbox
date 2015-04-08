@@ -50,5 +50,25 @@ public class Utility {
         }
     }
 
+    public int getNrOfBombs(Context context){
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String size = sharedPrefs.getString("pref_board size",
+                context.getString(R.string.pref_title_board_medium));
+        switch(size){
+            case "1": {
+                return 10;
+            }
+            case "2": {
+                return 40;
+            }
+            case "3": {
+                return 99;
+            }
+            default:
+                return 99;
+        }
+    }
+
 
 }

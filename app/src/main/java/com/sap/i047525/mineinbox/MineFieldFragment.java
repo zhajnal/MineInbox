@@ -50,10 +50,10 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
     int rows_num;// = 8;
     int cols_num;// = 8;
     //todo: read nr of bombs based on settings
-    int bomb_num = 20;
+    int bomb_num;// = 20;
     int unpickedFields;
 
-    int bombsOnField = bomb_num;
+    int bombsOnField; //= bomb_num;
 
     int gameState; //1 is active; 0 Game Over
 
@@ -95,6 +95,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         rows_num = mUtility.getBoardSizeX(getActivity());
         cols_num = mUtility.getBoardSizeY(getActivity());
+        bomb_num = mUtility.getNrOfBombs(getActivity());
+        bombsOnField = bomb_num;
     }
 
     @Override
@@ -238,8 +240,8 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
             for (int j = 0; j < cols; j++) {
                 mineField[i][j] = UNPICKED;
                 //todo: delete numbers - for testing show field status
-                list.add((String) Integer.toString(mineField[i][j]));
-                //list.add("");
+                //list.add((String) Integer.toString(mineField[i][j]));
+                list.add("");
             }
         }
 
@@ -256,8 +258,11 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         } else {
             mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = BOMB;
             //todo: delete numbers - for testing show field status
-            list.set(listPos, "9");
+            //list.set(listPos, "9");
             Log.d("listpos: ", "" + listPos);
+            Log.d("row: ", "" + getRowForListPos(listPos));
+            Log.d("col: ", "" + getColForListPos(listPos));
+            //Log.d("listpos calc: ", "" + getColForListPos(listPos));
         }
     }
 
@@ -300,20 +305,20 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
             //change to either BOMB or UNPICKED
             if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == FLAGGED_EMPTY) {
                 mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = UNPICKED;
-                list.set(listPos, "10");
+                //list.set(listPos, "10");
             } else {
                 mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = BOMB;
-                list.set(listPos, "9");
+                //list.set(listPos, "9");
             }
             bombsOnField++;
         } else {
             //flag for FLAG_BOMB or FLAG_EMPTY
             if (mineField[getRowForListPos(listPos)][getColForListPos(listPos)] == BOMB) {
                 mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = FLAGGED_BOMB;
-                list.set(listPos, "12");
+                //list.set(listPos, "12");
             } else {
                 mineField[getRowForListPos(listPos)][getColForListPos(listPos)] = FLAGGED_EMPTY;
-                list.set(listPos, "11");
+                //list.set(listPos, "11");
             }
             bombsOnField--;
         }
@@ -402,6 +407,7 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         for (int i = 0; i < updatedFields.size(); i++) {
             int listPos = updatedFields.get(i);
             View view = grid.getChildAt(listPos);
+
             if (view != null) {
                 view.setBackgroundColor(Color.GREEN);
             }
