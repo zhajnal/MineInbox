@@ -391,7 +391,7 @@ public class MineFieldFragment extends android.support.v4.app.Fragment {
         int[][] tmp;
         tmp = getNeighbours(listPos);
         for (int i = 0; i < tmp.length; i++) {
-            if (mineField[tmp[i][0]][tmp[i][1]] == BOMB) {
+            if (mineField[tmp[i][0]][tmp[i][1]] == BOMB || mineField[tmp[i][0]][tmp[i][1]] == FLAGGED_BOMB) {
                 bombNeighbours ++;
             }
         }
